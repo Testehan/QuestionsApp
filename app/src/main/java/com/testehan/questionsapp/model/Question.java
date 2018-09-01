@@ -3,10 +3,13 @@ package com.testehan.questionsapp.model;
 import java.util.List;
 
 public class Question {
-    private final String questionText;
-    // I will need to add here category or tags to differentiate between questions
-    private final List<Integer> questionCategories;
+    private Integer questionId;
+    private String questionText;
+    private List<Integer> questionCategories;
 
+    public Question(){};
+
+    // constructor used when populating the DB with the initial data
     public Question(String questionText, List<Integer> categories)
     {
         this.questionText = questionText;
@@ -19,5 +22,13 @@ public class Question {
 
     public List<Integer> getQuestionCategories() {
         return questionCategories;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 }

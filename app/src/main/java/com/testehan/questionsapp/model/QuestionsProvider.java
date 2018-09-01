@@ -4,29 +4,52 @@ import static com.testehan.questionsapp.model.QuestionConstants.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class QuestionsProvider {
+
+    public static final int NUMBER_OF_QUESTIONS = 19;
+
+    private Integer selectedQuestionCategory = FRIENDS;
+    public ArrayList<Question> selectedCategoryQuestions;
 
     public final ArrayList<Question> questions;
 
     public QuestionsProvider() {
         questions = new ArrayList<>();
-
-        initDummyData();
+        selectedCategoryQuestions = new ArrayList<>();
     }
 
     public String getNextQuestionText(){
-        int questionNo = new Random().nextInt(questions.size());
-        return questions.get(questionNo).getQuestionText();
+        int questionNo = new Random().nextInt(selectedCategoryQuestions.size());
+        return selectedCategoryQuestions.get(questionNo).getQuestionText();
+    }
+
+    public ArrayList<Question> getSelectedCategoryQuestions(){
+        return this.selectedCategoryQuestions;
+    }
+
+    public void setSelectedCategoryQuestions(ArrayList<Question> selectedCategoryQuestions) {
+        this.selectedCategoryQuestions = selectedCategoryQuestions;
     }
 
     public ArrayList<Question> getQuestions(){
+        if (questions.isEmpty()){
+            initDummyData();
+        }
         return this.questions;
     }
 
+    public Integer getSelectedQuestionCategory() {
+        return selectedQuestionCategory;
+    }
+
+    public void setSelectedQuestionCategory(Integer selectedQuestionCategory) {
+        this.selectedQuestionCategory = selectedQuestionCategory;
+    }
+
     private void initDummyData() {
+        // 19 questions
         Question question = new Question("Do you squeeze the toothpaste tube or roll it?", Arrays.asList(STRANGERS,FAMILY,FRIENDS));
         questions.add(question);
         question = new Question("What's one of your nicknames?",Arrays.asList(STRANGERS));
@@ -65,5 +88,7 @@ public class QuestionsProvider {
         questions.add(question);
         question = new Question("Whom do you run to when something bad happens in your life?",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
         questions.add(question);
+
+        // 19 questions
     }
 }

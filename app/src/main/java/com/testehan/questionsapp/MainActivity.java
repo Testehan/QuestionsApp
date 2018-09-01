@@ -2,6 +2,7 @@ package com.testehan.questionsapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
 
@@ -25,8 +26,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonClicked(View v){
+        if (questionsProvider.getSelectedCategoryQuestions().isEmpty()){
+            DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
+            DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
+
+            questionsProvider.setSelectedCategoryQuestions(databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory()));
+        }
+
+
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(nextQuestion());
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setText(R.string.next_question);
     }
 
     private String nextQuestion() {
@@ -42,9 +54,8 @@ public class MainActivity extends AppCompatActivity {
         // 2 new questions, then people updating the app will have all the questions reinserted in the app,
         // and we don't want this.. TODO...for now this is good, but we will need a solution for thism like findinf out how to move this in onCreate from DB
 
-        System.out.println("++++++++++++++ ++++++++++ "+ questionsProvider.getQuestions().size() + "!=" + databaseOperations.getNumberOfQuestionsInDB());
-        if (questionsProvider.getQuestions().size() != databaseOperations.getNumberOfQuestionsInDB()) {
-            System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + questionsProvider.getQuestions().size() + "!=" + databaseOperations.getNumberOfQuestionsInDB());
+        if (QuestionsProvider.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
+            System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + QuestionsProvider.NUMBER_OF_QUESTIONS + "!=" + databaseOperations.getNumberOfQuestionsInDB());
 //            databaseOperations.deleteAllQuestionsFromDB();
             for (Question question : questionsProvider.getQuestions()) {
                 databaseOperations.insertQuestion(question);

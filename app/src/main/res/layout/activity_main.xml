@@ -34,7 +34,7 @@
         android:layout_marginTop="8dp"
         android:padding="15dp"
         android:onClick="onButtonClicked"
-        android:text="Next Question"
+        android:text="@string/start"
         android:textSize="30dp"
         android:textColor="#FFFFFF"
         android:textAllCaps="false"
