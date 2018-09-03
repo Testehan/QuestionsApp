@@ -11,10 +11,12 @@ import com.testehan.questionsapp.database.DatabaseOperations;
 import com.testehan.questionsapp.model.Question;
 import com.testehan.questionsapp.model.QuestionsProvider;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private QuestionsProvider questionsProvider = new QuestionsProvider();
-
+    private boolean questionsStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,23 +31,47 @@ public class MainActivity extends AppCompatActivity {
         if (questionsProvider.getSelectedCategoryQuestions().isEmpty()){
             DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
             DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
+            ArrayList<Question> returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
 
-            questionsProvider.setSelectedCategoryQuestions(databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory()));
+            if (returnedQuestions.isEmpty()){
+                // this means that all questions from the DB that have the selected category were visited already
+                databaseOperations.updateQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
+                returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
+            }
+            questionsProvider.setSelectedCategoryQuestions(returnedQuestions);
         }
 
 
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(nextQuestion());
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setText(R.string.next_question);
+        changeStartButtonText();
+    }
+
+    private void changeStartButtonText() {
+        if (!questionsStarted) {
+            Button button = (Button) findViewById(R.id.button);
+            button.setText(R.string.next_question);
+            questionsStarted = true;
+        }
     }
 
     private String nextQuestion() {
-        return questionsProvider.getNextQuestionText();
+        Question currentQuestion = questionsProvider.getNextQuestion();
+        currentQuestion.setVisited();
+        questionsProvider.removeSelectedQuestion(currentQuestion);
+
+        DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
+        DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
+
+        databaseOperations.updateQuestionVisited(currentQuestion);
+
+        System.out.println("question with id" + currentQuestion.getQuestionId() + " was set as visited " + currentQuestion.getVisited());
+
+        return currentQuestion.getQuestionText();
     }
 
-    private void initDatabase() {
+    private void initDatabase() {                           // TODO Just pass the context to a different class that will handle all things related to DB stuff
         DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
         DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
 
@@ -56,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (QuestionsProvider.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
             System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + QuestionsProvider.NUMBER_OF_QUESTIONS + "!=" + databaseOperations.getNumberOfQuestionsInDB());
-//            databaseOperations.deleteAllQuestionsFromDB();
+            databaseOperations.deleteAllQuestionsFromDB();
             for (Question question : questionsProvider.getQuestions()) {
                 databaseOperations.insertQuestion(question);
             }

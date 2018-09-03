@@ -20,4 +20,8 @@ public class DatabaseConstants {
     public static final String CATEGORY_PK_ID = "id";
     public static final String CATEGORY_QUESTION_FK_ID = "question_id";
     public static final String CATEGORY_TYPE = "category_type";
+
+
+    public static final int QUESTION_WAS_VISITED = 1;
+    public static final int QUESTION_WAS_NOT_VISITED = 0;
 }
