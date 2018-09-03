@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.testehan.questionsapp.MainActivity">
+
+    <item  android:id="@+id/strangers"
+        android:title="Strangers"/>
+    <item  android:id="@+id/family"
+        android:title="Family"/>
+    <item  android:id="@+id/friends"
+        android:title="Friends"/>
+    <item  android:id="@+id/dates"
+        android:title="Dates" />
+</menu>

@@ -1,10 +1,16 @@
 package com.testehan.questionsapp;
 
+import static com.testehan.questionsapp.model.QuestionConstants.*;
+
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.testehan.questionsapp.database.DatabaseLifecycleHandler;
 import com.testehan.questionsapp.database.DatabaseOperations;
@@ -27,7 +33,85 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        resetQuestionSetup();
+        switch (id){
+            case R.id.strangers:
+                Toast.makeText(getApplicationContext(),"Strangers category selected",Toast.LENGTH_LONG).show();
+                questionsProvider.setSelectedQuestionCategory(STRANGERS);
+                handleActivityColors(STRANGERS);
+                return true;
+            case R.id.family:
+                Toast.makeText(getApplicationContext(),"Family category selected",Toast.LENGTH_LONG).show();
+                questionsProvider.setSelectedQuestionCategory(FAMILY);
+                handleActivityColors(FAMILY);
+                return true;
+            case R.id.friends:
+                Toast.makeText(getApplicationContext(),"Friends category selected",Toast.LENGTH_LONG).show();
+                questionsProvider.setSelectedQuestionCategory(FRIENDS);
+                handleActivityColors(FRIENDS);
+                return true;
+            case R.id.dates:
+                Toast.makeText(getApplicationContext(),"Dates category NOT WORKING",Toast.LENGTH_LONG).show();
+                questionsProvider.setSelectedQuestionCategory(DATES);
+                handleActivityColors(DATES);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private void handleActivityColors(Integer category) {
+//        #ff8f98
+        // TODO IF we want to change the status bar, we need something more complex..
+        switch (category){
+            case STRANGERS:
+                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(239, 236, 231));
+                break;
+            case FAMILY:
+                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(100,164,217));
+                break;
+            case FRIENDS:
+                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(123,205,200));
+                break;
+            case DATES:
+                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(255,143,152));
+                break;
+        }
+    }
+
+    private void resetQuestionSetup() {
+        Button button = (Button) findViewById(R.id.button);
+        button.setText(R.string.start);
+        questionsStarted = false;
+
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText("");
+
+        questionsProvider.getSelectedCategoryQuestions().clear();
+    }
+
     public void onButtonClicked(View v){
+        populateSelectedCategoryQuestions();
+
+
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(nextQuestion());
+
+        changeStartButtonText();
+    }
+
+    private void populateSelectedCategoryQuestions() {
         if (questionsProvider.getSelectedCategoryQuestions().isEmpty()){
             DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
             DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
@@ -40,12 +124,6 @@ public class MainActivity extends AppCompatActivity {
             }
             questionsProvider.setSelectedCategoryQuestions(returnedQuestions);
         }
-
-
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(nextQuestion());
-
-        changeStartButtonText();
     }
 
     private void changeStartButtonText() {

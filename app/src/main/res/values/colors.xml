@@ -6,4 +6,5 @@
     <color name="background">#7BCDC8</color>
     <color name="questionColor">#5a6175</color>
     <color name="statusBarBackground">#2a6f6b</color>
+    <color name="newStatusBarBackground">#828DAB</color>
 </resources>

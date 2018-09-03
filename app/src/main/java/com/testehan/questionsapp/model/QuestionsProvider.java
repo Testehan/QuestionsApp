@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class QuestionsProvider {
 
-    public static final int NUMBER_OF_QUESTIONS = 3;
+    public static final int NUMBER_OF_QUESTIONS = 87;
 
     private Integer selectedQuestionCategory = FRIENDS;
     public ArrayList<Question> selectedCategoryQuestions;
@@ -60,7 +60,7 @@ public class QuestionsProvider {
         questions.add(question);
         question = new Question("What kinds of movies do you most enjoy?",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
         questions.add(question);
-  /*      question = new Question("What magic tricks do you know?",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
+        question = new Question("What magic tricks do you know?",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
         questions.add(question);
         question = new Question("What's one guilty pleasure you enjoy too much to give up?",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
         questions.add(question);
@@ -240,9 +240,11 @@ public class QuestionsProvider {
         questions.add(question);
 
         // 86 questions
-*/
-//        question = new Question("",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
-//        questions.add(question);
+
+        question = new Question("No dates question yet...",Arrays.asList(DATES));
+        questions.add(question);
+
+        // 87
 //
 //        question = new Question("",Arrays.asList(STRANGERS,FAMILY,FRIENDS));
 //        questions.add(question);
