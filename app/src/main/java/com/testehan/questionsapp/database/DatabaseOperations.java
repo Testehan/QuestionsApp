@@ -99,8 +99,6 @@ public class DatabaseOperations {
                         TABLE_QUESTIONS, QUESTION_VISITED,
                         QUESTION_WAS_NOT_VISITED);
 
-        System.out.println("_______!!!_________ Executed query is " + SELECT_QUESTIONS_BY_CATEGORY_QUERY);
-
         SQLiteDatabase db = databaseLifecycleHandler.getReadableDatabase();
         Cursor cursor = db.rawQuery(SELECT_QUESTIONS_BY_CATEGORY_QUERY, null);
         try {

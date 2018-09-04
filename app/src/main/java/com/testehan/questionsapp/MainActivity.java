@@ -13,6 +13,10 @@ import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.testehan.questionsapp.database.DatabaseLifecycleHandler;
 import com.testehan.questionsapp.database.DatabaseOperations;
 import com.testehan.questionsapp.model.Question;
@@ -25,14 +29,18 @@ public class MainActivity extends AppCompatActivity {
     private QuestionsController questionsController = new QuestionsController();
     private boolean questionsStarted = false;
 
+    private InterstitialAd mInterstitialAd;
+    private int questionNumber = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initDatabase();
-
+        initAds();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onButtonClicked(View v){
+        if (questionNumber == 10){
+            handleAds();
+        } else {
+            populateSelectedCategoryQuestions();
+
+            TextView textView = (TextView) findViewById(R.id.textView);
+            textView.setText(nextQuestion());
+
+            changeStartButtonText();
+
+            questionNumber++;
+        }
+    }
+
     private void showToastMessage(String category) {
         Toast toast = Toast.makeText(getApplicationContext(),category + " category selected",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
@@ -106,14 +129,29 @@ public class MainActivity extends AppCompatActivity {
         questionsController.getSelectedCategoryQuestions().clear();
     }
 
-    public void onButtonClicked(View v){
-        populateSelectedCategoryQuestions();
+    private void handleAds() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            System.out.println("The interstitial wasn't loaded yet.");
+        }
+        questionNumber = 0;
+    }
 
+    private void initAds() {
+        MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use my code when publishing the app
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // ca-app-pub-4551088019011645~1202349694
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(nextQuestion());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
 
-        changeStartButtonText();
+        });
     }
 
     private void populateSelectedCategoryQuestions() {
@@ -148,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
 
         databaseOperations.updateQuestionVisited(currentQuestion);
-
-        System.out.println("question with id" + currentQuestion.getQuestionId() + " was set as visited " + currentQuestion.getVisited());
 
         return currentQuestion.getQuestionText();
     }
