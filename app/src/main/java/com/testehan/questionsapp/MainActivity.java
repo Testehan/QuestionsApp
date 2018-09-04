@@ -2,12 +2,16 @@ package com.testehan.questionsapp;
 
 import static com.testehan.questionsapp.model.QuestionConstants.*;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
@@ -72,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleActivityColors(Integer category) {
-//        #ff8f98
-        // TODO IF we want to change the status bar, we need something more complex..
         switch (category){
             case STRANGERS:
                 findViewById(R.id.mainView).setBackgroundColor(Color.rgb(239, 236, 231));
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.mainView).setBackgroundColor(Color.rgb(123,205,200));
                 break;
             case DATES:
-                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(255,143,152));
+                findViewById(R.id.mainView).setBackgroundColor(Color.rgb(255,160,152));
                 break;
         }
     }

@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/newStatusBarBackground</item>
         <item name="colorPrimaryDark">@color/newStatusBarBackground</item>
         <item name="colorAccent">@color/background</item>
-
     </style>
 
 </resources>
