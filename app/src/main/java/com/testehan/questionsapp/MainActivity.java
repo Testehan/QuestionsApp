@@ -2,16 +2,13 @@ package com.testehan.questionsapp;
 
 import static com.testehan.questionsapp.model.QuestionConstants.*;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
@@ -19,13 +16,13 @@ import android.widget.Toast;
 import com.testehan.questionsapp.database.DatabaseLifecycleHandler;
 import com.testehan.questionsapp.database.DatabaseOperations;
 import com.testehan.questionsapp.model.Question;
-import com.testehan.questionsapp.model.QuestionsProvider;
+import com.testehan.questionsapp.model.QuestionsController;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private QuestionsProvider questionsProvider = new QuestionsProvider();
+    private QuestionsController questionsController = new QuestionsController();
     private boolean questionsStarted = false;
 
     @Override
@@ -50,29 +47,35 @@ public class MainActivity extends AppCompatActivity {
         resetQuestionSetup();
         switch (id){
             case R.id.strangers:
-                Toast.makeText(getApplicationContext(),"Strangers category selected",Toast.LENGTH_LONG).show();
-                questionsProvider.setSelectedQuestionCategory(STRANGERS);
+                showToastMessage("Strangers");
+                questionsController.setSelectedQuestionCategory(STRANGERS);
                 handleActivityColors(STRANGERS);
                 return true;
             case R.id.family:
-                Toast.makeText(getApplicationContext(),"Family category selected",Toast.LENGTH_LONG).show();
-                questionsProvider.setSelectedQuestionCategory(FAMILY);
+                showToastMessage("Family");
+                questionsController.setSelectedQuestionCategory(FAMILY);
                 handleActivityColors(FAMILY);
                 return true;
             case R.id.friends:
-                Toast.makeText(getApplicationContext(),"Friends category selected",Toast.LENGTH_LONG).show();
-                questionsProvider.setSelectedQuestionCategory(FRIENDS);
+                showToastMessage("Friends");
+                questionsController.setSelectedQuestionCategory(FRIENDS);
                 handleActivityColors(FRIENDS);
                 return true;
             case R.id.dates:
-                Toast.makeText(getApplicationContext(),"Dates category NOT WORKING",Toast.LENGTH_LONG).show();
-                questionsProvider.setSelectedQuestionCategory(DATES);
+                showToastMessage("Dates");
+                questionsController.setSelectedQuestionCategory(DATES);
                 handleActivityColors(DATES);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void showToastMessage(String category) {
+        Toast toast = Toast.makeText(getApplicationContext(),category + " category selected",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 
     private void handleActivityColors(Integer category) {
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText("");
 
-        questionsProvider.getSelectedCategoryQuestions().clear();
+        questionsController.getSelectedCategoryQuestions().clear();
     }
 
     public void onButtonClicked(View v){
@@ -114,17 +117,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateSelectedCategoryQuestions() {
-        if (questionsProvider.getSelectedCategoryQuestions().isEmpty()){
+        if (questionsController.getSelectedCategoryQuestions().isEmpty()){
             DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
             DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
-            ArrayList<Question> returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
+            ArrayList<Question> returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsController.getSelectedQuestionCategory());
 
             if (returnedQuestions.isEmpty()){
                 // this means that all questions from the DB that have the selected category were visited already
-                databaseOperations.updateQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
-                returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsProvider.getSelectedQuestionCategory());
+                databaseOperations.updateQuestionsOfCategory(questionsController.getSelectedQuestionCategory());
+                returnedQuestions = databaseOperations.getQuestionsOfCategory(questionsController.getSelectedQuestionCategory());
             }
-            questionsProvider.setSelectedCategoryQuestions(returnedQuestions);
+            questionsController.setSelectedCategoryQuestions(returnedQuestions);
         }
     }
 
@@ -137,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String nextQuestion() {
-        Question currentQuestion = questionsProvider.getNextQuestion();
+        Question currentQuestion = questionsController.getNextQuestion();
         currentQuestion.setVisited();
-        questionsProvider.removeSelectedQuestion(currentQuestion);
+        questionsController.removeSelectedQuestion(currentQuestion);
 
         DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
         DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
@@ -160,10 +163,10 @@ public class MainActivity extends AppCompatActivity {
         // 2 new questions, then people updating the app will have all the questions reinserted in the app,
         // and we don't want this.. TODO...for now this is good, but we will need a solution for thism like findinf out how to move this in onCreate from DB
 
-        if (QuestionsProvider.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
-            System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + QuestionsProvider.NUMBER_OF_QUESTIONS + "!=" + databaseOperations.getNumberOfQuestionsInDB());
+        if (QuestionsController.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
+            System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + QuestionsController.NUMBER_OF_QUESTIONS + "!=" + databaseOperations.getNumberOfQuestionsInDB());
             databaseOperations.deleteAllQuestionsFromDB();
-            for (Question question : questionsProvider.getQuestions()) {
+            for (Question question : questionsController.getQuestions()) {
                 databaseOperations.insertQuestion(question);
             }
         }

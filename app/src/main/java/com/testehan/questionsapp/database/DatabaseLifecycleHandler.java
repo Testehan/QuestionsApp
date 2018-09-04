@@ -6,9 +6,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.testehan.questionsapp.model.Question;
-import com.testehan.questionsapp.model.QuestionsProvider;
-
 public class DatabaseLifecycleHandler extends SQLiteOpenHelper {
 
     private static DatabaseLifecycleHandler INSTANCE;
