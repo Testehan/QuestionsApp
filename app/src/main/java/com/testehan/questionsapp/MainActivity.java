@@ -5,13 +5,11 @@ import static com.testehan.questionsapp.model.QuestionConstants.*;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -55,22 +53,22 @@ public class MainActivity extends AppCompatActivity {
         resetQuestionSetup();
         switch (id){
             case R.id.strangers:
-                showToastMessage("Strangers");
+                showHelpMessage("Strangers");
                 questionsController.setSelectedQuestionCategory(STRANGERS);
                 handleActivityColors(STRANGERS);
                 return true;
             case R.id.family:
-                showToastMessage("Family");
+                showHelpMessage("Family");
                 questionsController.setSelectedQuestionCategory(FAMILY);
                 handleActivityColors(FAMILY);
                 return true;
             case R.id.friends:
-                showToastMessage("Friends");
+                showHelpMessage("Friends");
                 questionsController.setSelectedQuestionCategory(FRIENDS);
                 handleActivityColors(FRIENDS);
                 return true;
             case R.id.dates:
-                showToastMessage("Dates");
+                showHelpMessage("Dates");
                 questionsController.setSelectedQuestionCategory(DATES);
                 handleActivityColors(DATES);
                 return true;
@@ -95,10 +93,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showToastMessage(String category) {
-        Toast toast = Toast.makeText(getApplicationContext(),category + " category selected",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
+    private void showHelpMessage(String category) {
+        String message = "Press Start button to see the questions from " +category+ " category \n\n OR \n\n Select a new category from the menu";
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(message);
+
+//        Toast toast = Toast.makeText(getApplicationContext(),category + " category selected",Toast.LENGTH_LONG);
+//        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//        toast.show();
     }
 
     private void handleActivityColors(Integer category) {
