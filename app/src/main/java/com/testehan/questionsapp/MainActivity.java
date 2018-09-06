@@ -2,6 +2,7 @@ package com.testehan.questionsapp;
 
 import static com.testehan.questionsapp.model.QuestionConstants.*;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
 
             questionNumber++;
         }
+    }
+
+    public void onShareButtonClicked(View v){       //TODO ADD share text body etc below...
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Here is the share content body";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     private void showHelpMessage(String category) {
