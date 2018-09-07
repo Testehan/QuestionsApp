@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.View;
 
@@ -38,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         initDatabase();
         initAds();
+        checkShareButtonVisibility();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(nextQuestion());
 
             changeStartButtonText();
+            checkShareButtonVisibility();
 
             questionNumber++;
         }
@@ -103,10 +105,28 @@ public class MainActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+
+    private void checkShareButtonVisibility() {
+        TextView textView = (TextView) findViewById(R.id.textView);
+        if (textView.getText().toString().contains("Select a new category from the menu")) {
+            setShareButtonVisibility(View.GONE);
+        } else {
+            setShareButtonVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setShareButtonVisibility(int visibility) {
+        ImageButton shareButton = (ImageButton) findViewById(R.id.imageButton);
+        shareButton.setVisibility(visibility);
+    }
+
+
     private void showHelpMessage(String category) {
         String message = "Press Start button to see the questions from " +category+ " category \n\n OR \n\n Select a new category from the menu";
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(message);
+
+        checkShareButtonVisibility();
 
 //        Toast toast = Toast.makeText(getApplicationContext(),category + " category selected",Toast.LENGTH_LONG);
 //        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
