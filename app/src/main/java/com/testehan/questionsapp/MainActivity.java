@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkShareButtonVisibility() {
         TextView textView = (TextView) findViewById(R.id.textView);
-        if (textView.getText().toString().contains("Select a new category from the menu")) {
+        if (textView.getText().toString().contains("Press Start button to see the questions")) {
             setShareButtonVisibility(View.GONE);
         } else {
             setShareButtonVisibility(View.VISIBLE);
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showHelpMessage(String category) {
-        String message = "Press Start button to see the questions from " +category+ " category \n\n OR \n\n Select a new category from the menu";
+        String message = "Press Start button to see the questions from " +category+ " category";
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(message);
 
@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAds() {
         MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
-        mInterstitialAd = new InterstitialAd(this);                         // TODO Use my code when publishing the app
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // ca-app-pub-4551088019011645~1202349694
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use my code (see below and article) when publishing the app
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // ca-app-pub-4551088019011645/9060722052
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
