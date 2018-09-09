@@ -97,10 +97,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onShareButtonClicked(View v){       //TODO ADD share text body etc below...
+        TextView textView = (TextView) findViewById(R.id.textView);
+
+
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Here is the share content body";
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        String shareBody = textView.getText().toString();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share question");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
