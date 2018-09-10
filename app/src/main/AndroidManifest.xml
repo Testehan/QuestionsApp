@@ -4,6 +4,8 @@
 
     <application
         android:allowBackup="true"
+        android:versionCode="1"
+        android:versionName="1"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,7 +19,6 @@
             </intent-filter>
         </activity>
 
-        <!--TODO do i need to modify thE ANDROID name below as well? -->
         <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
         android:value="ca-app-pub-4551088019011645~1202349694"/>

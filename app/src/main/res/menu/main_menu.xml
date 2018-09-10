@@ -9,6 +9,6 @@
         android:title="Family"/>
     <item  android:id="@+id/friends"
         android:title="Friends"/>
-    <item  android:id="@+id/dates"
-        android:title="Dates" />
+  <!--  <item  android:id="@+id/dates"
+        android:title="Dates" />  -->
 </menu>

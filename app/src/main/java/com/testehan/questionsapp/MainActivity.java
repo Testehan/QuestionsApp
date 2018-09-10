@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 questionsController.setSelectedQuestionCategory(FRIENDS);
                 handleActivityColors(FRIENDS);
                 return true;
-            case R.id.dates:
+           /* case R.id.dates:
                 showHelpMessage("Dates");
                 questionsController.setSelectedQuestionCategory(DATES);
                 handleActivityColors(DATES);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -96,10 +96,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onShareButtonClicked(View v){       //TODO ADD share text body etc below...
+    public void onShareButtonClicked(View v){
         TextView textView = (TextView) findViewById(R.id.textView);
-
-
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = textView.getText().toString();
@@ -175,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAds() {
         MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
-        mInterstitialAd = new InterstitialAd(this);                         // TODO Use my code (see below and article) when publishing the app
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // ca-app-pub-4551088019011645/9060722052
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for development (see below and article)
+        mInterstitialAd.setAdUnitId("ca-app-pub-4551088019011645/9060722052"); //       ca-app-pub-3940256099942544/1033173712
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -235,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
         // and we don't want this.. TODO...for now this is good, but we will need a solution for thism like findinf out how to move this in onCreate from DB
 
         if (QuestionsController.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
-            System.out.println("++++++++++++++ ++++++++++inserting the questions in the db " + QuestionsController.NUMBER_OF_QUESTIONS + "!=" + databaseOperations.getNumberOfQuestionsInDB());
             databaseOperations.deleteAllQuestionsFromDB();
             for (Question question : questionsController.getQuestions()) {
                 databaseOperations.insertQuestion(question);
