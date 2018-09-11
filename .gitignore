@@ -7,3 +7,5 @@
 /captures
 .externalNativeBuild
 QuestionsProvider.java
+output.json
+*.apk
