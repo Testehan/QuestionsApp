@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -84,15 +85,7 @@ public class MainActivity extends AppCompatActivity {
         if (questionNumber == 10){
             handleAds();
         } else {
-            populateSelectedCategoryQuestions();
-
-            TextView textView = (TextView) findViewById(R.id.textView);
-            textView.setText(nextQuestion());
-
-            changeStartButtonText();
-            checkShareButtonVisibility();
-
-            questionNumber++;
+            handleNextQuestion();
         }
     }
 
@@ -106,6 +99,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+    private void handleNextQuestion() {
+        populateSelectedCategoryQuestions();
+
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(nextQuestion());
+
+        changeStartButtonText();
+        checkShareButtonVisibility();
+
+        questionNumber++;
+    }
 
     private void checkShareButtonVisibility() {
         TextView textView = (TextView) findViewById(R.id.textView);
@@ -173,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAds() {
         MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
-        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for development (see below and article)
-        mInterstitialAd.setAdUnitId("ca-app-pub-4551088019011645/9060722052"); //       ca-app-pub-3940256099942544/1033173712
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for RELEASE (see below and article)
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); //       ca-app-pub-4551088019011645/9060722052
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -231,8 +235,9 @@ public class MainActivity extends AppCompatActivity {
         // needs improvements if we will need to update the questions from the app, because if we add
         // 2 new questions, then people updating the app will have all the questions reinserted in the app,
         // and we don't want this.. TODO...for now this is good, but we will need a solution for thism like findinf out how to move this in onCreate from DB
-
+//        Log.e("Dan","<<<<<<<<<<< Do we need to clean the DB ??? >>>>>>>>>>>");
         if (QuestionsController.NUMBER_OF_QUESTIONS != databaseOperations.getNumberOfQuestionsInDB()) {
+//            Log.e("Dan","<<<<<<<<<<< Cleaning the DB >>>>>>>>>>>");
             databaseOperations.deleteAllQuestionsFromDB();
             for (Question question : questionsController.getQuestions()) {
                 databaseOperations.insertQuestion(question);

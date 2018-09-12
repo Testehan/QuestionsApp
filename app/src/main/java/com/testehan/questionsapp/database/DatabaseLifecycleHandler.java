@@ -17,7 +17,7 @@ public class DatabaseLifecycleHandler extends SQLiteOpenHelper {
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
-//        db.setForeignKeyConstraintsEnabled(true);     TODO either change API level, or see if it works without this
+//        db.setForeignKeyConstraintsEnabled(true);     TODO For now it works like this. Consider changing API level
     }
 
 
