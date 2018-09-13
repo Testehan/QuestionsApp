@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAds() {
         MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
-        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for RELEASE (see below and article)
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); //       ca-app-pub-4551088019011645/9060722052
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for tests (see below and article)
+        mInterstitialAd.setAdUnitId("ca-app-pub-4551088019011645/9060722052"); //          ca-app-pub-3940256099942544/1033173712
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
