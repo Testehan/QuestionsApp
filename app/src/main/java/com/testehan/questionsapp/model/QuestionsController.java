@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class QuestionsController {
 
-    public static final int NUMBER_OF_QUESTIONS = 470;
+    public static final int NUMBER_OF_QUESTIONS = 465;
 
     private Integer selectedQuestionCategory = FRIENDS;
 
