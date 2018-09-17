@@ -3,18 +3,20 @@ package com.testehan.questionsapp.model;
 import static com.testehan.questionsapp.model.QuestionConstants.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class QuestionsController {
 
-    public static final int NUMBER_OF_QUESTIONS = 465;
+    public static final int NUMBER_OF_QUESTIONS = 501;
+    public static final int NUMBER_OF_DATE_QUESTIONS = 36;
 
     private Integer selectedQuestionCategory = FRIENDS;
 
     public ArrayList<Question> selectedCategoryQuestions;
 
     public final ArrayList<Question> questions;
+
+    int questionNo = -1;
 
 
     public QuestionsController() {
@@ -23,7 +25,15 @@ public class QuestionsController {
     }
 
     public Question getNextQuestion(){
-        int questionNo = new Random().nextInt(selectedCategoryQuestions.size());
+        if (selectedQuestionCategory != DATES) {
+            questionNo = new Random().nextInt(selectedCategoryQuestions.size());
+        } else {
+            if (questionNo == NUMBER_OF_DATE_QUESTIONS){              // starting with 0, and we have 37 questions
+                questionNo = 0;
+            } else {
+                questionNo++;
+            }
+        }
         return selectedCategoryQuestions.get(questionNo);
     }
 
@@ -51,6 +61,7 @@ public class QuestionsController {
     }
 
     public void setSelectedQuestionCategory(Integer selectedQuestionCategory) {
+        this.questionNo = -1;
         this.selectedQuestionCategory = selectedQuestionCategory;
     }
 

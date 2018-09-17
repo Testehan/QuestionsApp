@@ -21,6 +21,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.testehan.questionsapp.database.DatabaseLifecycleHandler;
 import com.testehan.questionsapp.database.DatabaseOperations;
 import com.testehan.questionsapp.model.Question;
+import com.testehan.questionsapp.model.QuestionConstants;
 import com.testehan.questionsapp.model.QuestionsController;
 
 import java.util.ArrayList;
@@ -70,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
                 questionsController.setSelectedQuestionCategory(FRIENDS);
                 handleActivityColors(FRIENDS);
                 return true;
-           /* case R.id.dates:
+            case R.id.dates:
                 showHelpMessage("Dates");
                 questionsController.setSelectedQuestionCategory(DATES);
                 handleActivityColors(DATES);
-                return true;*/
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -113,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkShareButtonVisibility() {
         TextView textView = (TextView) findViewById(R.id.textView);
-        if (textView.getText().toString().contains("Press Start button to see the questions")) {
+        if (textView.getText().toString().contains("Press Start button to see the questions")
+                ||textView.getText().toString().contains("Read one question aloud to your partner")) {
             setShareButtonVisibility(View.GONE);
         } else {
             setShareButtonVisibility(View.VISIBLE);
@@ -127,7 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showHelpMessage(String category) {
-        String message = "Press Start button to see the questions from " +category+ " category";
+        String message;
+        if (category.equalsIgnoreCase("dates")){
+            message = "Read one question aloud to your partner, then both of you answer.\nSwap roles for the next question.\nAll 36 questions take around one hour.\n There is an exercise at the end as well.";
+        } else {
+            message = "Press Start button to see the questions from " + category + " category";
+        }
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(message);
 
@@ -177,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAds() {
         MobileAds.initialize(this, "ca-app-pub-4551088019011645~1202349694");
-        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for tests (see below and article)
-        mInterstitialAd.setAdUnitId("ca-app-pub-4551088019011645/9060722052"); //          ca-app-pub-3940256099942544/1033173712
+        mInterstitialAd = new InterstitialAd(this);                         // TODO Use code below for release (see below and article)
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // ca-app-pub-4551088019011645/9060722052
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -216,15 +223,19 @@ public class MainActivity extends AppCompatActivity {
 
     private String nextQuestion() {
         Question currentQuestion = questionsController.getNextQuestion();
+        if (questionsController.getSelectedQuestionCategory() != QuestionConstants.DATES) {
+            setQuestionAsVisited(currentQuestion);
+        }
+        return currentQuestion.getQuestionText();
+    }
+
+    private void setQuestionAsVisited(Question currentQuestion) {
         currentQuestion.setVisited();
         questionsController.removeSelectedQuestion(currentQuestion);
-
         DatabaseLifecycleHandler databaseLifecycleHandler = DatabaseLifecycleHandler.getInstance(this);
         DatabaseOperations databaseOperations = new DatabaseOperations(databaseLifecycleHandler);
 
         databaseOperations.updateQuestionVisited(currentQuestion);
-
-        return currentQuestion.getQuestionText();
     }
 
     private void initDatabase() {                           // TODO Just pass the context to a different class that will handle all things related to DB stuff

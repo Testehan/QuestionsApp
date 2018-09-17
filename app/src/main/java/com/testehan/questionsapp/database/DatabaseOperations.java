@@ -86,8 +86,6 @@ public class DatabaseOperations {
         // WHERE CATEGORIES.category_type = selectedQuestionCategory;
         // AND QUESTIONS.visited = 0;
 
-        // TODO Maybe this query should also contain information related to the visited status of a question
-
         String SELECT_QUESTIONS_BY_CATEGORY_QUERY =
                 String.format("SELECT * FROM %s LEFT OUTER JOIN %s ON %s.%s = %s.%s WHERE %s.%s = %s AND %s.%s = %s",
                         TABLE_QUESTIONS,
