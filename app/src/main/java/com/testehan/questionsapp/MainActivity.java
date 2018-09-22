@@ -83,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonClicked(View v){
-        if (questionNumber == 10){
-            handleAds();
+        if ((questionNumber == 10) && (mInterstitialAd.isLoaded())){
+            mInterstitialAd.show();
+            questionNumber = 0;
         } else {
             handleNextQuestion();
         }
@@ -171,15 +172,6 @@ public class MainActivity extends AppCompatActivity {
         textView.setText("");
 
         questionsController.getSelectedCategoryQuestions().clear();
-    }
-
-    private void handleAds() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            System.out.println("The interstitial wasn't loaded yet.");
-        }
-        questionNumber = 0;
     }
 
     private void initAds() {
